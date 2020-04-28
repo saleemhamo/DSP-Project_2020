@@ -9,5 +9,4 @@ def read_chars():
 
 	chars[' '] = chars.pop('space')
 	chars[' ']['char'] = ' '
-
 	return chars
