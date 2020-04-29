@@ -1,3 +1,5 @@
+import winsound
+
 import matplotlib.pyplot as plt
 import numpy as np
 import wavio
@@ -12,12 +14,13 @@ def my_stem(n, x):
 	plt.show()
 
 
-def my_plot(n, x):
+def my_plot(n, x, string):
 	plt.plot(n, x)
-	plt.title("Encoder")
-	plt.ylabel("X")
-	plt.xlabel("n")
+	plt.title("Encoded Signal")
+	plt.savefig("./images/plot-{}.png".format(string))
 	plt.show()
+
+
 
 
 def write_wav_signal(y, file_name):
@@ -27,6 +30,12 @@ def write_wav_signal(y, file_name):
 
 def read_wav_signal(file_name):
 	rate, data = wavfile.read(file_name)
+
+	#
+	# print(rate)
+	# print(len(data))
+	# print((rate-len(data))*0.5)
+
 	y_data = []
 	length = len(data)
 	for i in range(0, length):
@@ -46,5 +55,6 @@ def my_plot_2(y):
 	plt.show()
 
 
-def plot_fft():
-	pass
+
+def play_sound(filename):
+	winsound.PlaySound(filename, winsound.SND_FILENAME)

@@ -2,29 +2,36 @@ from numpy.fft import fft
 from BPF import *
 
 
-def decode_fft(y_data, list_chars):
+def decode_fft(y_data, list_chars, fs=10000):
 	sample_length = len(y_data)
-	step = 400
-	N = 400
+
+
 	T = 0.04
+	N = int(fs*T)
+	step = N
+
+
 	start = 0
 	end = N
 	decoded_sting = ''
-	for c in range(0, int(sample_length / 400)):
+	for c in range(0, int(sample_length / step)):
 
 		z = y_data[start:end]
 		yf = fft(z)
 		start += step
 		end += step
 
+		index = int(fs/step)
 		freq = []
-		for i in range(5, int(len(yf) / 2)):
-			if int(abs(yf[i])) > 10:
-				freq.append(i * 25)
+		for i in range(5, int(len(yf))):
+			if int(abs(yf[i])) > 1:
+				freq.append(i * index)
 
 		low = freq[0]
 		middle = freq[1]
 		high = freq[2]
+
+		# print("low {}, middle {}, high {}".format(low, middle, high))
 
 		for i in range(0, len(list_chars)):
 			if (list_chars[i]['low'] == low) & (list_chars[i]['middle'] == middle) & (
@@ -35,11 +42,11 @@ def decode_fft(y_data, list_chars):
 	return decoded_sting
 
 
-def decode_BPF(y_data, list_chars):
+def decode_BPF(y_data, list_chars, fs=10000):
 	sample_length = len(y_data)
-	step = 400
-	N = 400
 	T = 0.04
+	N = int(fs * T)
+	step = N
 	start = 0
 	end = N
 	decoded_sting = ''
@@ -47,12 +54,10 @@ def decode_BPF(y_data, list_chars):
 	middle_frequencies = [1000, 1200, 1500]
 	high_frequencies = [2000, 3000, 4000]
 
-	for c in range(0, int(sample_length / 400)):
+	for c in range(0, int(sample_length / step)):
 
 		# z = y_data[start:end]
 		# yf = fft(z)
-
-
 
 		for f in low_frequencies:
 			if check_freq(y_data, f, start, end):

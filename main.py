@@ -3,16 +3,19 @@ from decoder import *
 from characters import *
 from signals_functions import *
 
+
 characters = read_chars()
 list_chars = list(characters.values())
 
-String = 'a a'
+String = 'saleem ahmad hamo'
 y = encode(String, characters)
-write_wav_signal(y, "ex.wav")
+write_wav_signal(y, "test.wav")
+r = read_wav_signal("test.wav")
+# play_sound('test.wav')
 
-r = read_wav_signal("ex.wav")
+n = np.arange(len(r))
+my_plot(n, r, 'test')
 
-
-# print(decode_fft(r, list_chars))
-
-# print(decode_BPF(r, list_chars))
+# print(decode_fft(r, list_chars, fs=10000))
+#
+print(decode_BPF(r, list_chars, fs=10000))
