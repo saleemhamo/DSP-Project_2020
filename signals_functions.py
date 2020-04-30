@@ -16,7 +16,10 @@ def my_stem(n, x):
 
 def my_plot(n, x, string):
 	plt.plot(n, x)
-	plt.title("Encoded Signal")
+	if string == 'decoded':
+		plt.title("Decoded Signal")
+	else:
+		plt.title("Encoded Signal")
 	plt.savefig("./images/plot-{}.png".format(string))
 	plt.show()
 
@@ -30,12 +33,6 @@ def write_wav_signal(y, file_name):
 
 def read_wav_signal(file_name):
 	rate, data = wavfile.read(file_name)
-
-	#
-	# print(rate)
-	# print(len(data))
-	# print((rate-len(data))*0.5)
-
 	y_data = []
 	length = len(data)
 	for i in range(0, length):

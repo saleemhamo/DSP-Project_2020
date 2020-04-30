@@ -76,6 +76,10 @@ def decode_BPF(y_data, list_chars, fs=10000):
 				 list_chars[i]['high'] == high):
 				# print(list_chars[i]['char'])
 				decoded_sting += list_chars[i]['char']
+
+
+
+		
 		start += step
 		end += step
 
