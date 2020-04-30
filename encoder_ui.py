@@ -9,6 +9,7 @@ from signals_functions import *
 characters = read_chars()
 list_chars = list(characters.values())
 string = ''
+
 encoded_signal = None
 
 
