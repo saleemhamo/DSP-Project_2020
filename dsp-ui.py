@@ -16,20 +16,22 @@ decoded_string = ""
 
 file_name = None
 
+
 class Ui_MainWindow(object):
 
 	def decode_fft(self):
+		global decoded_frequencies
 		global decoded_string
-		decoded_string = decode_fft(wav_signal, list_chars, fs=10000)
+		decoded_string, decoded_frequencies = decode_fft(wav_signal, list_chars, fs=10000)
 		msg = QMessageBox()
 		msg.setWindowTitle("Decoded String")
 		msg.setText(decoded_string)
 		x = msg.exec_()
 
-
 	def decode_bpf(self):
+		global decoded_frequencies
 		global decoded_string
-		decoded_string = decode_fft(wav_signal, list_chars, fs=10000)
+		decoded_string, decoded_frequencies = decode_fft(wav_signal, list_chars, fs=10000)
 		msg = QMessageBox()
 		msg.setWindowTitle("Decoded String")
 		msg.setText(decoded_string)
@@ -43,10 +45,22 @@ class Ui_MainWindow(object):
 		x = msg.exec_()
 
 	def more_info_decoder(self):
-		pass
+		global decoded_string
+		msg = QMessageBox()
+		msg.setWindowTitle("Information")
+		msg.setText("The decoded String is : '{}'\n"
+			     "The signal is consisted of {} samples"
+			     "It was sampled at a sampling frequency = 10000Hz\n"
+			     "It has {} charachters Each character is encoded to 40ms signal consinsts of 3 sinosoidal signals carrying the correspinding frequencies for that character\n"
+			     "Number of samples/char = 400".format(decoded_string, len(wav_signal), len(decoded_string)))
+		x = msg.exec_()
 
 	def display_freq(self):
-		pass
+		global decoded_frequencies
+		msg = QMessageBox()
+		msg.setWindowTitle("Frequencies")
+		msg.setText(decoded_frequencies)
+		x = msg.exec_()
 
 	def listen_decoder(self):
 		global wav_signal
@@ -78,8 +92,6 @@ class Ui_MainWindow(object):
 		self.listen_btn_3.setEnabled(False)
 		self.plot_btn_3.setEnabled(False)
 		self.view_btn.setEnabled(False)
-
-
 
 	def enable_btns_decoder(self):
 		self.browse_btn.setEnabled(False)
@@ -127,7 +139,7 @@ class Ui_MainWindow(object):
 			msg.setText("Enter a string to Encode")
 			x = msg.exec_()
 		else:
-			encoded_signal = encode(string, characters)
+			encoded_signal, string = encode(string, characters)
 			print("{} is encoded".format(string))
 			self.enable_btns()
 
@@ -152,7 +164,14 @@ class Ui_MainWindow(object):
 		write_wav_signal(encoded_signal, "./wav_files/audio-saved-{}.wav".format(string))
 
 	def more_info(self):
-		pass
+		global string
+		msg = QMessageBox()
+		msg.setWindowTitle("Information")
+		msg.setText("The String to encode is : '{}'\n"
+			     "It was sampled at a sampling frequency = 10000Hz\n"
+			     "Each character is encoded to 40ms signal consinsts of 3 sinosoidal signals carrying the correspinding frequencies for that character\n"
+			     "".format(string))
+		x = msg.exec_()
 
 	def reset(self):
 		global string
@@ -474,20 +493,18 @@ class Ui_MainWindow(object):
 		self.plot_btn.clicked.connect(self.plot_signal)
 		self.save_btn.clicked.connect(self.save_signal)
 		self.listen_btn.clicked.connect(self.listen_to_signal)
-		# self.more_info_btn.clicked.connect(self.browse_file)
+		self.more_info_btn.clicked.connect(self.more_info)
 		self.reset_btn.clicked.connect(self.reset)
 
 		self.decode_ft_btn.clicked.connect(self.decode_fft)
 		self.decode_bpf_btn.clicked.connect(self.decode_bpf)
-		# self.more_info_btn_2.clicked.connect(self.more_info_decoder)
-		# self.display_freq_btn.clicked.connect(self.display_freq)
+		self.more_info_btn_2.clicked.connect(self.more_info_decoder)
+		self.display_freq_btn.clicked.connect(self.display_freq)
 		self.listen_btn_3.clicked.connect(self.listen_decoder)
 		self.plot_btn_3.clicked.connect(self.plot_decoder)
 		self.reset_btn_2.clicked.connect(self.reset_decoder)
 		self.browse_btn.clicked.connect(self.browse_file)
 		self.view_btn.clicked.connect(self.view_decoded_string)
-
-
 
 	def retranslateUi(self, MainWindow):
 		_translate = QtCore.QCoreApplication.translate

@@ -6,7 +6,7 @@ def encode(string, chars):
 	T = 0.04  # sample duration (seconds)
 	n = np.arange(0, fs * T, 1)
 	string = string.lower()
-	# string = re.sub(r'\W', "", string)
+	string = re.sub(r'\W', " ", string)
 
 	y = []
 	for i in range(0, len(string)):
@@ -16,4 +16,4 @@ def encode(string, chars):
 		y = np.concatenate([y, x])
 	# print(len(y))
 
-	return y
+	return y, string
